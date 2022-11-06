@@ -1,0 +1,261 @@
+[settings]
+throttle-output = 5
+throttle-output-for = 10
+screenchange-reload = true
+
+compositing-background = source
+compositing-foreground = over
+compositing-overline = over
+compositing-underline = over
+compositing-border = over
+
+
+[global/wm]
+margin-top = 0
+margin-bottom = 0
+
+[colors]
+background = #cc282a36
+background-alt = #cc1E2029
+foreground = #a6accd
+sep = #44475a
+
+white = #FFFFFF
+black = #000000
+red = #ff5555
+pink = #ff79c6
+purple = #bd93f9
+blue = #6272a4
+cyan = #8be9fd
+teal = #00B19F
+green = #50fa7b
+lime = #f1fa8c
+yellow = #f1fa8c
+amber = #FBC02D
+orange = #ffb86c
+brown = #AC8476
+indigo = #6C77BB
+gray = #44475a
+blue-gray = #44475a
+
+[bar/main]
+fixed-center = true
+width = 100%
+height = 34
+
+offset-x = 0
+offset-y = 0
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 0
+line-color = ${colors.background}
+
+border-bottom-size = 0
+border-bottom-color = ${colors.foreground}
+
+padding = 2
+
+module-margin-left = 1
+module-margin-right = 1
+
+font-0 = "MonaLisa:size=16;3"
+font-1 = "Iosevka Nerd Font:size=22;4"
+font-2 = "feather:size=18;4"
+
+modules-left = exwm-workspace sep
+modules-center = date
+modules-right = sep network sep battery sep cpu sep memory sep backlight sep
+
+seperator =
+
+dim-value = 1.0
+
+tray-position = right
+tray-detached = false
+tray-max-size = 16
+tray-background = ${colors.background}
+tray-offset-x = 0
+tray-offset-y = 0
+tray-padding = 0
+tray-scale = 1.0
+
+enable-ipc = true
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/sep]
+type = custom/text
+content = |
+
+content-foreground = ${colors.sep}
+
+
+[module/exwm-workspace]
+type = custom/ipc
+hook-0 = emacsclient -e "exwm-workspace-current-index" | sed -e 's/^"//' -e 's/"$//'
+initial = 1
+format-padding = 1
+
+[module/date]
+type = internal/date
+
+interval = 1.0
+date = %A, %d %B
+time = %H:%M:%S
+
+date-alt =  %A, %d %B %Y
+time-alt = %k:%M:%S
+
+format = <label>
+format-prefix = ""
+format-prefix-foreground = ${colors.pink}
+
+label = %date% %time%
+
+[module/wired-network]
+type = internal/network
+interface = eth0
+
+[module/wireless-network]
+type = internal/network
+interface = wlp0s20f3
+
+[module/network]
+type = internal/network
+interface = wlp0s20f3
+
+interval = 1.0
+
+accumulate-stats = true
+
+unknown-as-up = true
+
+format-connected = <label-connected>
+format-connected-prefix = 
+format-connected-prefix-foreground = ${colors.green}
+
+format-disconnected = <label-disconnected>
+format-disconnected-prefix = 
+format-disconnected-prefix-foreground = ${colors.red}
+
+; Available tokens:
+;   %ifname%    [wireless+wired]
+;   %local_ip%  [wireless+wired]
+;   %local_ip6% [wireless+wired]
+;   %essid%     [wireless]
+;   %signal%    [wireless]
+;   %upspeed%   [wireless+wired]
+;   %downspeed% [wireless+wired]
+;   %linkspeed% [wired]
+; Default: %ifname% %local_ip%
+label-connected = "%{A1:nm-connection-editor &:} %essid% %{F#bd93f9}%{A}"
+;label-connected = "%{A1:nm-connection-editor &:} %essid% %{F#bd93f9} %{F-} %downspeed%%{A}"
+
+label-disconnected = "%{A1:nm-connection-editor &:} Offline%{A}"
+
+
+[module/battery]
+type = internal/battery
+
+full-at = 99
+
+battery = BAT0
+adapter = ADP1
+
+poll-interval = 2
+
+time-format = %H:%M
+
+format-charging = <label-charging>
+format-charging-prefix = ""
+format-charging-prefix-foreground = ${colors.orange}
+
+format-discharging = <label-discharging>
+format-discharging-prefix = ""
+format-discharging-prefix-foreground = ${colors.orange}
+
+format-full = <label-full>
+format-full-prefix = 
+format-full-prefix-foreground = ${colors.green}
+
+label-charging = " %percentage%%"
+
+label-discharging = " %percentage%%"
+
+label-full = " Full"
+
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+
+animation-charging-0 = 
+animation-charging-1 = 
+
+animation-charging-framerate = 750
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+interval = 5
+
+format-volume = <ramp-volume> <label-volume>
+
+format-muted = <label-muted>
+format-muted-prefix = 
+format-muted-prefix-foreground = ${colors.red}
+
+label-volume = %percentage%%
+
+label-muted = " Muted"
+label-muted-foreground = ${colors.sep}
+
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+ramp-volume-foreground = ${colors.blue}
+
+ramp-headphones-0 = 
+ramp-headphones-background = ${colors.blue}
+
+
+[module/cpu]
+type = internal/cpu
+interval = 1
+
+format = <label>
+format-prefix = 
+format-prefix-foreground = ${colors.purple}
+
+label = " %percentage%%"
+
+[module/memory]
+type = internal/memory
+interval = 1
+
+format = <label>
+format-prefix = 
+format-prefix-foreground = ${colors.yellow}
+
+label = " %gb_used%"
+
+[module/backlight]
+type = internal/backlight
+
+card = intel_backlight
+format = <ramp> <label>
+
+label = %percentage%%
+
+ramp-0 = 
+ramp-1 = 
+ramp-2 = 
+ramp-3 = 
+ramp-4 = 
+ramp-foreground = ${colors.lime}
