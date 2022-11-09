@@ -231,124 +231,124 @@
 
 
 ;; LSP package
-;;(use-package lsp-mode
-;;  :commands (lsp lsp-deferred)
-;;  :hook (lsp-mode . emacs/lsp-mode-setup)
-;;  :init
-;;  (setq lsp-keymap-prefix "C-c l")
-;;  :config
-;; (lsp-enable-which-key-integration t))
+(use-package lsp-mode
+  :commands (lsp lsp-deferred)
+  :hook (lsp-mode . emacs/lsp-mode-setup)
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :config
+  (lsp-enable-which-key-integration t))
 
 
-;;(use-package lsp-ui
-;;  :hook (lsp-mode . lsp-ui-mode)
-;;  :custom
-;;  (lsp-ui-doc-position 'bottom))
+(use-package lsp-ui
+  :hook (lsp-mode . lsp-ui-mode)
+  :custom
+  (lsp-ui-doc-position 'bottom))
 
 
 ;; DAP Package
-;;(use-package dap-mode
-;;  :commands dap-debug
-;;  :config
-;;  (require 'dap-node)
-;;  (dap-node-setup))
+(use-package dap-mode
+  :commands dap-debug
+  :config
+  (require 'dap-node)
+  (dap-node-setup))
 
 
 ;; Web mode package
-;;(use-package web-mode
-;;  :ensure t)
+(use-package web-mode
+  :ensure t)
 
 ;; Mustache mode package
-;;(use-package mustache-mode
-;;  :ensure t)
+(use-package mustache-mode
+  :ensure t)
 
 ;; CSS package
-;;(use-package css-mode
-;;  :init
-;;  (setq css-indent-offset 2))
+(use-package css-mode
+  :init
+  (setq css-indent-offset 2))
 
 ;; Smart parens package
-;;(use-package smartparens
-;;  :init (add-hook 'css-mode-hook 'smartparens-mode))
+(use-package smartparens
+  :init (add-hook 'css-mode-hook 'smartparens-mode))
 
 
 ;; Javascript mode package
-;;(use-package js2-mode
-;;  :ensure t
-;;  :init
-;;  (setq js-indent-level 2)
-;;  (setq-default js2-indent-level 2
-;;		js2-basic-offset 2
-;;		js2-auto-indent-p t
-;;		js2-cleanup-whitespace t
-;;		js2-enter-indents-newline t
-;;		js2-enter-on-enter-key t
-;;		js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval"  "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
-;;  (add-hook 'js2-mode-hook
-;;	    (lambda ()
-;;	      (push '("function" . ?f) prettify-symbols-alist)))
-;;  (add-hook 'js2-mode-hook
-;;	    (lambda () (flycheck-select-checker "javascript-eslint")))
-;;  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
+(use-package js2-mode
+  :ensure t
+  :init
+  (setq js-indent-level 2)
+  (setq-default js2-indent-level 2
+		js2-basic-offset 2
+		js2-auto-indent-p t
+		js2-cleanup-whitespace t
+		js2-enter-indents-newline t
+		js2-enter-on-enter-key t
+		js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval"  "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
+  (add-hook 'js2-mode-hook
+	    (lambda ()
+	      (push '("function" . ?f) prettify-symbols-alist)))
+  (add-hook 'js2-mode-hook
+	    (lambda () (flycheck-select-checker "javascript-eslint")))
+  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
 
 
 ;; Javascript Refactor package
-;;(use-package js2-refactor
-;;  :ensure t
-;;  :init (add-hook 'js2-mode-hook 'js2-refactor-mode)
-;;  :config (js2r-add-keybindings-with-prefix "C-c C-r"))
+(use-package js2-refactor
+  :ensure t
+  :init (add-hook 'js2-mode-hook 'js2-refactor-mode)
+  :config (js2r-add-keybindings-with-prefix "C-c C-r"))
 
 ;; Javascript X Reference package
-;;(use-package xref-js2
-;;  :ensure t)
+(use-package xref-js2
+  :ensure t)
 
 ;; Rjsx mode package
-;;(use-package rjsx-mode)
+(use-package rjsx-mode)
 
 ;; Docker mode package
-;;(use-package dockerfile-mode)
+(use-package dockerfile-mode)
 
-;;(use-package yaml-mode
-;;  :init
-;;  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
-;;  (add-hook 'yaml-mode-hook
-;;      '(lambda ()
-;;        (define-key yaml-mode-map "\C-m" 'newline-and-indent))))
+(use-package yaml-mode
+  :init
+  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+  (add-hook 'yaml-mode-hook
+      '(lambda ()
+        (define-key yaml-mode-map "\C-m" 'newline-and-indent))))
 
 ;; Company mode package
-;;(use-package company
-;;  :after lsp-mode
-;;  :hook (lsp-mode . company-mode)
-;;  :bind
-;;  (:map company-active-map
-;;	      ("<tab>" . company-complete-selection))
-;;  (:map lsp-mode-map
-;;	("<tab>" . company-indent-or-complete-common))
-;;  :custom
-;;  (company-minimum-prefix-length 1)
-;;  (company-idle-delay 0.0))
+(use-package company
+  :after lsp-mode
+  :hook (lsp-mode . company-mode)
+  :bind
+  (:map company-active-map
+	      ("<tab>" . company-complete-selection))
+  (:map lsp-mode-map
+	("<tab>" . company-indent-or-complete-common))
+  :custom
+  (company-minimum-prefix-length 1)
+  (company-idle-delay 0.0))
 
-;;(use-package company-box
-;;  :hook (company-mode .company-box-mode))
+(use-package company-box
+  :hook (company-mode .company-box-mode))
 
 
 ;; Projectile package
-;;(use-package projectile
-;;  :diminish projectile-mode
-;;  :config (projectile-mode)
-;;  :bind-keymap
-;;  ("C-c p" . projectile-command-map)
-;;  :init
-;;  (when (file-directory-p "~/Projects")
-;;    (setq projectile-project-search-path '("~/Projects")))
-;;  (setq projectile-switch-project-action #'projectile-dired))
+(use-package projectile
+  :diminish projectile-mode
+  :config (projectile-mode)
+  :bind-keymap
+  ("C-c p" . projectile-command-map)
+  :init
+  (when (file-directory-p "~/Projects")
+    (setq projectile-project-search-path '("~/Projects")))
+  (setq projectile-switch-project-action #'projectile-dired))
 
 
 ;; Magit
-;;(use-package magit
-;;  :commands magit-status
-;;  :custom
-;;  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+(use-package magit
+  :commands magit-status
+  :custom
+  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
 
 ;; Auto added stuff
