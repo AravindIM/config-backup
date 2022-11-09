@@ -15,8 +15,8 @@ margin-top = 0
 margin-bottom = 0
 
 [colors]
-background = #cc282a36
-background-alt = #cc1E2029
+background = #e5282a36
+background-alt = #e51E2029
 foreground = #a6accd
 sep = #44475a
 

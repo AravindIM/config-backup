@@ -1,11 +1,11 @@
 ;; Phoenix's Desktop Environment Config for EXWM
 
 ;; Variables
-(defvar emacs/frame-transparency '(80 . 80))
-(defvar emacs/frame-transparency '(80 . 80))
+(defvar emacs/frame-transparency '(90 . 90))
+(defvar emacs/frame-transparency '(90 . 90))
 
 ;; Environment Variables
-(setenv "DBUS_SESSION_BUS_ADDRESS" "unix:path=/run/user/1000/bus")
+;;(setenv "DBUS_SESSION_BUS_ADDRESS" "unix:path=/run/user/1000/bus")
 
 ;; Transparency
 (set-frame-parameter (selected-frame) 'alpha emacs/frame-transparency)
@@ -62,13 +62,17 @@
 
 (defun exwm/init-hook ()
   (setq confirm-kill-emacs nil)
+  (start-process-shell-command "picom" nil "picom -b")
   (exwm-workspace-switch-create 1)
   (exwm/start-panel)
   (start-process-shell-command "xinput" nil "xinput set-prop 'SYNA8006:00 06CB:CD8B Touchpad' 'libinput Natural Scrolling Enabled' 1")
-  (start-process-shell-command "xinput" nil "xsetroot -cursor_name arrow")
+  (start-process-shell-command "xsetroot" nil "xsetroot -cursor_name left_ptr")
   (exwm/run-in-background "nm-applet")
   (exwm/run-in-background "pasystray")
-  (exwm/run-in-background "blueman-applet"))
+  (exwm/run-in-background "blueman-applet")
+  (exec-path-from-shell-initialize)
+  (dmenu-initialize)
+  (dmenu--cache-executable-files))
 
 
 (defun exwm/update-class ()
@@ -77,10 +81,16 @@
 
 (defun exwm/update-title ()
   (pcase exwm-class-name
-    ("Brave-browser" (exwm-workspace-rename-buffer (format "Brave: %s" exwm-title)))))
+    ("Brave-browser" (exwm-workspace-rename-buffer (format "Brave: %s" exwm-title)))
+    ("firefox-default" (exwm-workspace-rename-buffer (format "Firefox: %s" exwm-title)))))
 
 
 ;; Exwm Package configs
+
+(use-package exec-path-from-shell)
+
+(use-package dmenu)
+
 
 (use-package exwm
   :config
@@ -174,4 +184,4 @@
   (desktop-environment-brightness-normal-decrement "5%-"))
 
 
-(use-package dmenu)
+(server-start)
