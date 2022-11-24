@@ -62,11 +62,13 @@
 
 (defun exwm/init-hook ()
   (setq confirm-kill-emacs nil)
+  (exwm/run-in-background "lxsession")
   (start-process-shell-command "picom" nil "picom -b")
   (exwm-workspace-switch-create 1)
   (exwm/start-panel)
   (start-process-shell-command "xinput" nil "xinput set-prop 'SYNA8006:00 06CB:CD8B Touchpad' 'libinput Natural Scrolling Enabled' 1")
   (start-process-shell-command "xsetroot" nil "xsetroot -cursor_name left_ptr")
+  (exwm/run-in-background "xss-lock -- slock")
   (exwm/run-in-background "nm-applet")
   (exwm/run-in-background "pasystray")
   (exwm/run-in-background "blueman-applet")

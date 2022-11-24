@@ -2,6 +2,8 @@
 ;; by the graphical installer.
 
 (use-modules (gnu)
+	     (gnu packages shells)
+	     (gnu packages shellutils)
 	     (gnu packages vim)
 	     (gnu packages ncurses)
 	     (gnu packages ssh)
@@ -12,24 +14,40 @@
 	     (gnu packages pulseaudio)
 	     (gnu packages video)
 	     (gnu packages xorg)
+	     (gnu packages xdisorg)
 	     (gnu packages compton)
 	     (gnu packages fonts)
 	     (gnu packages gnome)
 	     (gnu packages emacs)
 	     (gnu packages emacs-xyz)
 	     (gnu packages wm)
+	     (gnu packages suckless)
 	     (gnu packages image-viewers)
 	     (gnu packages xfce)
+	     (gnu packages lxde)
+	     (gnu packages dunst)
 	     (gnu packages certs)
 	     (gnu services)
-	     (gnu services dbus)
 	     (nongnu packages linux)
              (nongnu system linux-initrd))
 
-(use-service-modules desktop networking ssh xorg)
+(use-service-modules desktop networking ssh xorg pm base dbus docker virtualization)
+
+(define %backlight-udev-rule
+  (udev-rule
+   "90-backlight.rules"
+   (string-append "ACTION==\"add\", SUBSYSTEM==\"backlight\", "
+                  "RUN+=\"/run/current-system/profile/bin/chgrp video /sys/class/backlight/%k/brightness\""
+                  "\n"
+                  "ACTION==\"add\", SUBSYSTEM==\"backlight\", "
+                  "RUN+=\"/run/current-system/profile/bin/chmod g+w /sys/class/backlight/%k/brightness\"")))
 
 (define %my-desktop-services
   (modify-services %desktop-services
+		   (udev-service-type config =>
+                                      (udev-configuration (inherit config)
+                                                          (rules (cons %backlight-udev-rule
+                                                                       (udev-configuration-rules config)))))
 		   (guix-service-type config => (guix-configuration
 						 (inherit config)
 						 (substitute-urls
@@ -53,8 +71,9 @@
                   (comment "Ph03n1x AIM")
                   (group "users")
                   (home-directory "/home/aim")
+		  (shell (file-append zsh "/bin/zsh"))
                   (supplementary-groups
-                    '("wheel" "netdev" "audio" "video" "lp")))
+                    '("wheel" "netdev" "audio" "video" "lp" "docker" "libvirt" "kvm")))
                 %base-user-accounts))
   (packages
     (append
@@ -65,6 +84,10 @@
       tlp
       openssh
       git
+
+      ;; Shell utils
+      zsh-syntax-highlighting
+      zsh-autosuggestions
 
       ;; Bluetooth
       bluez
@@ -84,6 +107,10 @@
       xinput
       xsetroot
       xmodmap
+      xrandr
+
+      ;; Xdisorg
+      xss-lock
 
       ;; Compton
       picom
@@ -102,6 +129,7 @@
       ;;Gnome Themes
       hicolor-icon-theme
       adwaita-icon-theme
+      gnome-icon-theme
 
       ;; Gnome Virtual File System for USB Mounting
       gvfs
@@ -113,12 +141,21 @@
 
       ;; WM
       polybar
+      dunst
+      brightnessctl
+      libnotify
 
       ;; Image Viewers
       feh
 
       ;; XFCE
       thunar
+
+      ;;LXDE
+      lxsession
+
+      ;; Eclipse Java
+      eclipse-java
 
       ;; Certs
       nss-certs)
@@ -127,16 +164,29 @@
   (services
     (append
      (list (service tor-service-type)
+	   (screen-locker-service slock)
+	   (service tlp-service-type
+		    (tlp-configuration
+		     (cpu-scaling-governor-on-ac (list "performance"))
+		     (sched-powersave-on-bat? #t)))
 	   (bluetooth-service #:bluez bluez #:auto-enable? #t)
 	   (simple-service 'blueman dbus-root-service-type (list blueman))
             (set-xorg-configuration
               (xorg-configuration
-                (keyboard-layout keyboard-layout))))
+               (keyboard-layout keyboard-layout)))
+	    (service docker-service-type)
+	    (service libvirt-service-type
+		     (libvirt-configuration
+		      (unix-sock-group "libvirt")
+		      (tls-port "16555")))
+	    (service virtlog-service-type
+		     (virtlog-configuration
+		      (max-clients 1000))))
       %my-desktop-services))
   (bootloader
     (bootloader-configuration
       (bootloader grub-efi-bootloader)
-      (target "/boot/efi")
+      (targets '("/boot/efi"))
       (keyboard-layout keyboard-layout)))
   (mapped-devices
     (list (mapped-device

@@ -8,7 +8,7 @@
 (defvar emacs/default-variable-font-size 180)
 
 ;; Functions
-(defun emacs/lsp-mode-setup ()
+(defun emacs/lsp-moden-setup ()
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
   (lsp-headerline-breadcrumb-mode))
 
@@ -49,6 +49,8 @@
 
 ;; Quit prompts with ESC key
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+(global-set-key (kbd "C-x <escape>") 'keyboard-escape-quit)
+(global-set-key (kbd "C-c <escape>") 'keyboard-escape-quit)
 
 
 ;; Package Manager
@@ -152,10 +154,20 @@
 (use-package doom-themes
   :init (load-theme 'doom-dracula t))
 
+
+;; All the icons package
+(use-package all-the-icons
+  :ensure t)
+
+
 ;; Doom Modeline package
 (use-package doom-modeline
   :init (doom-modeline-mode 1)
-  :custom ((doom-modeline-height 15)))
+  :custom
+  (setq doom-modeline-height 15)
+  (setq doom-modeline-icon t)
+  (setq doom-modeline-major-mode-icon t)
+  (setq doom-modeline-buffer-file-name-style 'truncate-except-project))
 
 
 ;; Which key package
@@ -233,7 +245,9 @@
 ;; LSP package
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
-  :hook (lsp-mode . emacs/lsp-mode-setup)
+  :hook
+  (lsp-mode . emacs/lsp-mode-setup)
+  (prog-mode . lsp)
   :init
   (setq lsp-keymap-prefix "C-c l")
   :config
@@ -312,8 +326,11 @@
   :init
   (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
   (add-hook 'yaml-mode-hook
-      '(lambda ()
+      (lambda ()
         (define-key yaml-mode-map "\C-m" 'newline-and-indent))))
+
+;; Java mode package
+(use-package lsp-java)
 
 ;; Company mode package
 (use-package company
@@ -329,7 +346,7 @@
   (company-idle-delay 0.0))
 
 (use-package company-box
-  :hook (company-mode .company-box-mode))
+  :hook (company-mode . company-box-mode))
 
 
 ;; Projectile package
@@ -357,8 +374,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(auth-source-save-behavior nil)
  '(package-selected-packages
-   '(exec-path-from-shell dmenu helpful marginalia orderless vertico which-key doom-modeline doom-themes vterm rainbow-delimiters no-littering auto-package-update use-package desktop-environment exwm)))
+   '(lsp-java all-the-icons-install-fonts all-the-icons exec-path-from-shell dmenu helpful marginalia orderless vertico which-key doom-modeline doom-themes vterm rainbow-delimiters no-littering auto-package-update use-package desktop-environment exwm)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
